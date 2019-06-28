@@ -1,6 +1,7 @@
 package edu.lasalle.oop.model;
 
 import edu.lasalle.oop.manager.Imprimivel;
+import io.vavr.control.Either;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,13 +23,28 @@ public class Ciclistas implements Imprimivel {
        return pedais.remove(bike);
     }
 
+    public boolean remover(final int accountNumber){
+        return pedais.removeIf(p -> p.getAccountNumber() == accountNumber);
+    }
+
     public Optional<UrbanBike> procurarPedal(final int number) {
         return pedais.stream().filter(p -> p.getAccountNumber().equals(number)).findFirst();
     }
 
-    @Override
-    public void mostrarDados() {
-        System.out.println(this.toString());
+    public Either<String, Void> pedalar(final UrbanBike conta, double valor){
+
+        if(conta instanceof PedalPop){
+            final PedalPop pop = (PedalPop) conta;
+
+            if((pop.getSaldo() + pop.getTaxaDeOperacao()) < valor){
+                return Either.left("Você não tem saldo suficiente");
+            } else {
+                pop.pedalar(valor);
+            }
+        } else {
+            final PedalPremium premium = (PedalPremium) conta;
+        }
+
     }
 
     @Override

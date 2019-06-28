@@ -1,6 +1,7 @@
 package edu.lasalle.oop.model;
 
 import edu.lasalle.oop.manager.Imprimivel;
+import io.vavr.control.Either;
 import io.vavr.control.Try;
 
 import java.util.Objects;
@@ -48,11 +49,6 @@ public abstract class UrbanBike implements Imprimivel {
 
     public void setSaldo(double saldo) {
         this.saldo = saldo;
-    }
-
-    @Override
-    public void mostrarDados() {
-        System.out.println(this.toString());
     }
 
     @Override

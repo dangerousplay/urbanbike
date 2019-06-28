@@ -2,6 +2,8 @@ package edu.lasalle.oop.manager;
 
 public interface Imprimivel {
 
-    void mostrarDados();
+    default void mostrarDados() {
+        System.out.println(this.toString());
+    }
 
 }

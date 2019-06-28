@@ -5,9 +5,8 @@ import java.util.Objects;
 public class PedalPremium extends UrbanBike {
     private double limite;
 
-    @Override
-    public void mostrarDados() {
-        System.out.println(this.toString());
+    public PedalPremium(double limite) {
+        this.limite = limite;
     }
 
     @Override

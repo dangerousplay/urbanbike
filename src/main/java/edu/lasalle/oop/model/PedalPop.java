@@ -1,9 +1,15 @@
 package edu.lasalle.oop.model;
 
+import io.vavr.control.Try;
+
 import java.util.Objects;
 
 public class PedalPop extends UrbanBike {
     private double taxaDeOperacao;
+
+    public PedalPop(double taxaDeOperacao) {
+        this.taxaDeOperacao = taxaDeOperacao;
+    }
 
     @Override
     public void pedalar(double valor) {
@@ -25,11 +31,6 @@ public class PedalPop extends UrbanBike {
 
     public void setTaxaDeOperacao(double taxaDeOperacao) {
         this.taxaDeOperacao = taxaDeOperacao;
-    }
-
-    @Override
-    public void mostrarDados() {
-        System.out.println(this.toString());
     }
 
     @Override
