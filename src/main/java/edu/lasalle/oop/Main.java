@@ -2,7 +2,11 @@ package edu.lasalle.oop;
 
 import edu.lasalle.oop.manager.Relatorio;
 import edu.lasalle.oop.model.Ciclistas;
+import edu.lasalle.oop.model.PedalPop;
+import edu.lasalle.oop.model.PedalPremium;
 import edu.lasalle.oop.model.UrbanBike;
+import io.vavr.control.Either;
+import io.vavr.control.Try;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -44,11 +48,11 @@ public class Main {
                     System.out.println("Digite o número da conta: ");
                     final Optional<UrbanBike> conta = ciclistas.procurarPedal(SCANNER.nextInt());
 
-                    if(!conta.isPresent()){
+                    if (!conta.isPresent()) {
                         System.out.println("Conta não encontrada...");
                         continue;
                     }
-                    showAccountMenu(conta.get());
+                    showAccountMenu(ciclistas, conta.get());
                     break;
                 case 5:
                     System.exit(0);
@@ -74,7 +78,7 @@ public class Main {
         );
     }
 
-    private static void showAccountMenu(final UrbanBike account) {
+    private static void showAccountMenu(final Ciclistas ciclistas, final UrbanBike account) {
         System.out.println("Escolha uma opção: ");
 
         System.out.println("1. Creditar: recebe um valor e deposita na carteira.\n" +
@@ -85,35 +89,94 @@ public class Main {
 
         final int opcao = SCANNER.nextInt();
 
-        switch (opcao){
-            case 1:
-                System.out.println("Digite o valor a ser depositado: ");
-                final double valor = SCANNER.nextDouble();
-                account.creditar(valor);
-                break;
-            case 2:
-                System.out.println("Digite a quantidade a pedalar: ");
-                final double distance = SCANNER.nextDouble();
-                account.pedalar(distance);
-                break;
-            case 3:
-                break;
-            case 4:
+        while (true){
+            switch (opcao) {
+                case 1:
+                    System.out.println("Digite o valor a ser depositado: ");
+                    final double valor = SCANNER.nextDouble();
+                    account.creditar(valor);
+                    break;
+                case 2: {
+                    System.out.println("Digite a quantidade a pedalar: ");
+                    final double distance = SCANNER.nextDouble();
+                    final Either<String, Void> resultado = ciclistas.pedalar(account, distance);
 
-                break;
-            case 5:
-                break;
-            default:
-                System.out.printf("Opção inválida: %s\n", opcao);
-                break;
+                    if (resultado.isLeft()) {
+                        System.out.println(resultado.getLeft());
+                    } else {
+                        System.out.println("Pedalado com sucesso!");
+                    }
+
+                    break;
+                }
+                case 3: {
+                    final Optional<UrbanBike> pedal = ciclistas.procurarPedal(getAccountNumber());
+
+                    if (pedal.isEmpty()) {
+                        System.out.println("Pedal não encontrado");
+                        break;
+                    }
+
+                    System.out.println("Digite o valor a transferir: ");
+                    final double money = SCANNER.nextDouble();
+
+                    final Try<Void> resultado = account.transferir(pedal.get(), money);
+
+                    if(resultado.isFailure()){
+                        System.out.println(resultado.failed().get().getMessage());
+                        break;
+                    }
+
+                    System.out.println("Dinheiro transferido com sucesso!");
+                    account.mostrarDados();
+
+                    break;
+                }
+                case 4:{
+                    account.mostrarDados();
+                    break;
+                }
+                case 5:
+                    return;
+                default:
+                    System.out.printf("Opção inválida: %s%n", opcao);
+                    break;
+            }
         }
     }
 
     private static UrbanBike createAccount() {
+        //Para ser Pedal Premium é obrigatório creditar um mínimo de R$100,00 na carteira na criação.
         System.out.println("Digite o número da conta: ");
         final int accountNumber = SCANNER.nextInt();
 
+        System.out.println("Escolha o tipo de conta: ");
+        System.out.println("1 - Conta Pedal Pop");
+        System.out.println("2 - Conta Pedal Premium");
 
+        final int tipo = SCANNER.nextInt();
+
+        if(tipo == 1){
+            System.out.println("Digite a taxa de operação: ");
+
+            PedalPop pedal = new PedalPop(SCANNER.nextDouble());
+
+            System.out.println("Digite o saldo inicial da conta: ");
+
+            pedal.setSaldo(SCANNER.nextDouble());
+            pedal.setAccountNumber(accountNumber);
+
+            return pedal;
+        } else {
+            System.out.println("Digite o limite da conta: ");
+            PedalPremium pedal = new PedalPremium(SCANNER.nextDouble());
+
+            System.out.println("Digite o saldo inicial da conta: ");
+
+            pedal.setSaldo(SCANNER.nextDouble());
+            pedal.setAccountNumber(accountNumber);
+            return pedal;
+        }
     }
 
     private static int getAccountNumber() {

@@ -32,6 +32,8 @@ public class Ciclistas implements Imprimivel {
     }
 
     public Either<String, Void> pedalar(final UrbanBike conta, double valor){
+        if(conta == null)
+            return Either.left("Conta não pode ser nula");
 
         if(conta instanceof PedalPop){
             final PedalPop pop = (PedalPop) conta;
@@ -43,8 +45,15 @@ public class Ciclistas implements Imprimivel {
             }
         } else {
             final PedalPremium premium = (PedalPremium) conta;
+
+            if(premium.getSaldo() < -premium.getLimite()){
+                return Either.left("Você não tem saldo suficiente");
+            }
+
+            premium.pedalar(valor);
         }
 
+        return Either.right(null);
     }
 
     @Override

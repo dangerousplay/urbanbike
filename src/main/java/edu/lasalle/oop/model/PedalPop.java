@@ -4,12 +4,15 @@ import io.vavr.control.Try;
 
 import java.util.Objects;
 
+//A primeira possui um atributo taxaDeOperacao que é descontado sempre que ciclista pedalar ou creditar.
 public class PedalPop extends UrbanBike {
     private double taxaDeOperacao;
 
     public PedalPop(double taxaDeOperacao) {
         this.taxaDeOperacao = taxaDeOperacao;
     }
+
+
 
     @Override
     public void pedalar(double valor) {
@@ -54,4 +57,6 @@ public class PedalPop extends UrbanBike {
     public int hashCode() {
         return Objects.hash(super.hashCode(), taxaDeOperacao);
     }
+
+
 }

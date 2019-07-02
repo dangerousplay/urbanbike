@@ -10,6 +10,14 @@ public abstract class UrbanBike implements Imprimivel {
     private Integer accountNumber;
     private double saldo;
 
+    public UrbanBike(Integer accountNumber, double saldo) {
+        this.accountNumber = accountNumber;
+        this.saldo = saldo;
+    }
+
+    protected UrbanBike() {
+    }
+
     public void debitar(final double valor){
         this.saldo -= valor;
     }
@@ -26,7 +34,7 @@ public abstract class UrbanBike implements Imprimivel {
         Objects.requireNonNull(urbanBike);
 
         if(this.saldo < valor){
-            return Try.failure(new IllegalArgumentException("Not enought money to transfer"));
+            return Try.failure(new IllegalArgumentException("Não tem saldo suficiente para transferir"));
         }
 
         this.debitar(valor);
