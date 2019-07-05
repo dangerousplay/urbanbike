@@ -112,7 +112,7 @@ public class Main {
                 case 3: {
                     final Optional<UrbanBike> pedal = ciclistas.procurarPedal(getAccountNumber());
 
-                    if (pedal.isEmpty()) {
+                    if (!pedal.isPresent()) {
                         System.out.println("Pedal não encontrado");
                         break;
                     }

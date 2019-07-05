@@ -3,6 +3,7 @@ package edu.lasalle.oop.model;
 import edu.lasalle.oop.manager.Imprimivel;
 import io.vavr.control.Either;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,10 @@ import java.util.Optional;
  * */
 public class Ciclistas implements Imprimivel {
     private List<UrbanBike> pedais;
+
+    public Ciclistas() {
+        pedais = new ArrayList<>();
+    }
 
     public void inserir(final UrbanBike bike){
         pedais.add(bike);

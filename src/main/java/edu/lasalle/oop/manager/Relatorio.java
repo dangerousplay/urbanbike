@@ -10,6 +10,6 @@ public class Relatorio {
     }
 
     public void gerarRelatorio(){
-
+        ciclistas.mostrarDados();
     }
 }
